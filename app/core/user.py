@@ -40,7 +40,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
             user: User,
             request: Optional[Request] = None
     ):
-        logger.info(f"Пользователь {user.email} зарегистрирован.")
+        logger.info("Пользователь {user.email} зарегистрирован.")
 
     async def validate_password(self, password: str, user):
         if len(password) < 3:
@@ -52,14 +52,13 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
     ):
-        logger.info(f"Пользователь {user.email} забыл пароль. Токен: {token}")
+        logger.info("Пользователь {user.email} забыл пароль. Токен: {token}")
 
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None
     ):
         logger.info(
-            f"Запрос верификации для пользователя"
-            f"{user.email}. Токен: {token}",
+            "Запрос верификации для пользователя {user.email}. Токен: {token}",
         )
 
 

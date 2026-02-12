@@ -23,7 +23,7 @@ async def create_superuser(session: AsyncSession) -> None:
     )
     if existing_user.scalars().first():
         logger.info(
-            f"Суперпользователь {settings.superuser_email} уже существует",
+            "Суперпользователь {settings.superuser_email} уже существует",
         )
         return
 
@@ -39,8 +39,7 @@ async def create_superuser(session: AsyncSession) -> None:
         async for user_manager in get_user_manager(user_db):
             await user_manager.create(user_data)
             logger.info(
-                f"Суперпользователь {settings.superuser_email}"
-                f"успешно создан",
+                "Суперпользователь {settings.superuser_email} успешно создан",
             )
             break
         break
