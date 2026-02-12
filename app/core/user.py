@@ -53,7 +53,8 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
         self, user: User, token: str, request: Optional[Request] = None
     ):
         print(
-            f"Запрос верификации для пользователя {user.email}. Токен: {token}"
+            f"Запрос верификации для пользователя"
+            f"{user.email}. Токен: {token}"
         )
 
 

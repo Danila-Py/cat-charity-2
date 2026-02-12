@@ -33,7 +33,8 @@ async def create_superuser(session: AsyncSession) -> None:
         async for user_manager in get_user_manager(user_db):
             await user_manager.create(user_data)
             print(
-                f"Суперпользователь {settings.superuser_email} успешно создан"
+                f"Суперпользователь {settings.superuser_email}"
+                f"успешно создан"
             )
             break
         break

@@ -6,6 +6,7 @@ from app.core.base import Base
 
 class User(Base):
     """Модель пользователя."""
+
     __tablename__ = 'user'
 
     id: Mapped[int] = mapped_column(primary_key=True)
