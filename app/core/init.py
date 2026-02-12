@@ -1,3 +1,5 @@
+import logging
+
 from contextlib import asynccontextmanager
 from typing import AsyncIterator
 
@@ -11,6 +13,8 @@ from app.core.db import get_async_session
 from app.models.user import User
 from app.schemas.user import UserCreate
 
+logger = logging.getLogger(__name__)
+
 
 async def create_superuser(session: AsyncSession) -> None:
     """Создание суперпользователя, если его нет."""
@@ -18,7 +22,9 @@ async def create_superuser(session: AsyncSession) -> None:
         select(User).where(User.email == settings.superuser_email)
     )
     if existing_user.scalars().first():
-        print(f"Суперпользователь {settings.superuser_email} уже существует")
+        logger.info(
+            f"Суперпользователь {settings.superuser_email} уже существует",
+        )
         return
 
     user_data = UserCreate(
@@ -32,7 +38,7 @@ async def create_superuser(session: AsyncSession) -> None:
     async for user_db in get_user_db(session):
         async for user_manager in get_user_manager(user_db):
             await user_manager.create(user_data)
-            print(
+            logger.info(
                 f"Суперпользователь {settings.superuser_email}"
                 f"успешно создан",
             )
@@ -43,9 +49,9 @@ async def create_superuser(session: AsyncSession) -> None:
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator:
     """Lifespan контекст для инициализации при старте."""
-    print("Запуск приложения QRKot...")
+    logger.info("Запуск приложения QRKot...")
     async for session in get_async_session():
         await create_superuser(session)
         break
     yield
-    print("Завершение приложения QRKot...")
+    logger.info("Завершение приложения QRKot...")

@@ -1,3 +1,5 @@
+import logging
+
 from typing import Optional
 
 from fastapi import Depends, Request
@@ -20,6 +22,9 @@ from app.core.db import get_async_session
 from app.models.user import User
 
 
+logger = logging.getLogger(__name__)
+
+
 async def get_user_db(session: AsyncSession = Depends(get_async_session)):
     yield SQLAlchemyUserDatabase(session, User)
 
@@ -35,7 +40,7 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
             user: User,
             request: Optional[Request] = None
     ):
-        print(f"Пользователь {user.email} зарегистрирован.")
+        logger.info(f"Пользователь {user.email} зарегистрирован.")
 
     async def validate_password(self, password: str, user):
         if len(password) < 3:
@@ -47,12 +52,12 @@ class UserManager(IntegerIDMixin, BaseUserManager[User, int]):
     async def on_after_forgot_password(
         self, user: User, token: str, request: Optional[Request] = None
     ):
-        print(f"Пользователь {user.email} забыл пароль. Токен: {token}")
+        logger.info(f"Пользователь {user.email} забыл пароль. Токен: {token}")
 
     async def on_after_request_verify(
         self, user: User, token: str, request: Optional[Request] = None
     ):
-        print(
+        logger.info(
             f"Запрос верификации для пользователя"
             f"{user.email}. Токен: {token}",
         )

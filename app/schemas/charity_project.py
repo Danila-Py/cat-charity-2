@@ -6,6 +6,8 @@ from app.schemas.base import BaseDB
 
 
 class CharityProjectBase(BaseModel):
+    """Базовая схема благотворительного проекта."""
+
     name: Optional[str] = Field(None, min_length=5, max_length=100)
     description: Optional[str] = Field(None, min_length=10)
     full_amount: Optional[PositiveInt] = None
@@ -14,6 +16,7 @@ class CharityProjectBase(BaseModel):
 
 
 class CharityProjectUpdate(CharityProjectBase):
+    """Схема для обновления данных существующего проекта."""
 
     class Config:
         json_schema_extra = {
@@ -26,10 +29,12 @@ class CharityProjectUpdate(CharityProjectBase):
 
 
 class CharityProjectCreate(CharityProjectUpdate):
+    """Схема для создания нового благотворительного проекта."""
+
     name: str = Field(..., min_length=5, max_length=100)
     description: str = Field(..., min_length=10)
     full_amount: PositiveInt
 
 
 class CharityProjectDB(CharityProjectBase, BaseDB):
-    pass
+    """Схема для отображения данных проекта из базы данных."""
